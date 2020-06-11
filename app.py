@@ -2,7 +2,7 @@
 
 
 from flask_debugtoolbar import DebugToolbarExtension
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash
 from models import db, connect_db, User, Post
 
 app = Flask(__name__)
@@ -20,9 +20,23 @@ connect_db(app)
 # db.create_all()
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    """
+    custom 404 error page
+    """
+
+    return render_template('404.html'), 404
+
+
 @app.route('/')
 def home_page():
-    return redirect('/users')
+    """
+    renders last 5 posts
+    """
+
+    posts = Post.query.order_by(Post.id.desc()).limit(5).all()
+    return render_template('home.html', posts=posts)
 
 
 @app.route('/users')
@@ -33,7 +47,7 @@ def all_users():
     have a link to create a new user
     """
 
-    users = User.query.all()
+    users = User.query.order_by(User.last_name, User.first_name).all()
 
     return render_template('all_users.html', users=users)
 
@@ -60,6 +74,8 @@ def add_new_user():
                 last_name=last_name, image_url=image_url)
     db.session.add(user)
     db.session.commit()
+
+    flash(f'{user.full_name} created', 'alert alert-success')
 
     return redirect(f'/users/{user.id}')
 
@@ -103,6 +119,8 @@ def submit_edited_user(user_id):
     db.session.add(user)
     db.session.commit()
 
+    flash(f'{user.full_name} edited', 'alert alert-success')
+
     return redirect(f'/users/{user.id}')
 
 
@@ -112,12 +130,15 @@ def delete_user(user_id):
     deletes the current user
     returns to all user page
     """
-
+    user = User.query.get(user_id)
     User.query.filter_by(id=user_id).delete()
     # or the following two lines
     # user = User.query.get(user_id)
     # db.session.delete(user)
     db.session.commit()
+
+    flash(f'User: {user.full_name} deleted', 'alert alert-danger')
+
     return redirect('/users')
 
 
@@ -146,6 +167,8 @@ def add_post(user_id):
     post = Post(title=title, content=content, user_id=user_id)
     db.session.add(post)
     db.session.commit()
+
+    flash(f'{post.title} created', 'alert alert-success')
 
     return redirect(f'/users/{user_id}')
 
@@ -187,6 +210,8 @@ def submit_edited_post(post_id):
     db.session.add(post)
     db.session.commit()
 
+    flash(f'{post.title} edited', 'alert alert-success')
+
     return redirect(f'/users/{post.users.id}')
 
 
@@ -201,4 +226,6 @@ def delete_post(post_id):
 
     db.session.delete(post)
     db.session.commit()
+
+    flash(f'Post: {post.title} deleted', 'alert alert-danger')
     return redirect(f'/users/{user_id}')
