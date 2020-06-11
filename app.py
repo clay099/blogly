@@ -18,6 +18,7 @@ connect_db(app)
 
 # run below line when DB have been updated
 # db.create_all()
+# see updated seeds.py file when you want to update
 
 
 @app.errorhandler(404)
@@ -131,10 +132,8 @@ def delete_user(user_id):
     returns to all user page
     """
     user = User.query.get(user_id)
-    User.query.filter_by(id=user_id).delete()
-    # or the following two lines
-    # user = User.query.get(user_id)
-    # db.session.delete(user)
+
+    db.session.delete(user)
     db.session.commit()
 
     flash(f'User: {user.full_name} deleted', 'alert alert-danger')
@@ -221,7 +220,7 @@ def delete_post(post_id):
     deletes the post
     redirects back to all users
     """
-    post = Post.query.get_or_404(post_id)
+    post = Post.query.filter(Post.id == post_id).first()
     user_id = post.user_id
 
     db.session.delete(post)
