@@ -41,12 +41,22 @@ class User(db.Model):
 class Post(db.Model):
     """Post Class"""
 
-    __tablename__ = "users"
+    __tablename__ = "posts"
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.String, nullable=False, default=datetime.now())
-    user_id = db.Column(db.Integer, db.ForeignKey(users.id))
+
+    date = datetime.now()
+    format_date = date.strftime("%B %d %Y")
+    created_at = db.Column(db.DateTime, nullable=False, default=format_date)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     users = db.relationship('User', backref='posts')
+
+    def __repr__(self):
+        """show information about users"""
+
+        p = self
+        return f"< Post {p.title} {p.content} {p.created_at} {p.user_id}>"
