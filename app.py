@@ -1,4 +1,6 @@
 """Blogly application."""
+# run below line when DB have been updated
+# db.create_all()
 
 from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask, request, redirect, render_template
@@ -14,7 +16,6 @@ app.config['SECRET_KEY'] = 'Secret'
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
-db.create_all()
 
 
 @app.route('/')
