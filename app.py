@@ -228,3 +228,97 @@ def delete_post(post_id):
 
     flash(f'Post: {post.title} deleted', 'alert alert-danger')
     return redirect(f'/users/{user_id}')
+
+
+@app.route('/tags')
+def all_tags():
+    """
+    lists all tags with links to each tag page
+    """
+    tags = Tag.query.all()
+    return render_template('all_tags.html', tags=tags)
+
+
+@app.route('/tags/<int:tag_id>')
+def tag_details(tag_id):
+    """
+    details about tags with ability to edit or delete
+    """
+
+    tag = Tag.query.get_or_404(tag_id)
+
+    return render_template('tag_details.html', tag=tag)
+
+
+@app.route('/tags/new')
+def new_tag():
+    """
+    create new tag
+    """
+
+    return render_template('create_tag.html')
+
+
+@app.route('/tags/new', methods=['POST'])
+def add_new_tag():
+    """
+    submit new tag to db
+    redirects to tag list
+    """
+
+    name = request.form.get('name')
+
+    tag = Tag(name=name)
+    db.session.add(tag)
+    db.session.commit()
+
+    flash(f'{tag.name} created', 'alert alert-success')
+
+    return redirect('/tags')
+
+
+@app.route('/tags/<int:tag_id>/edit')
+def edit_tag(tag_id):
+    """
+    form to edit tag
+    """
+
+    tag = Tag.query.get_or_404(tag_id)
+
+    return render_template('edit_tag.html', tag=tag)
+
+
+@app.route('/tags/<int:tag_id>/edit', methods=['POST'])
+def submit_updated_tag(tag_id):
+    """
+    submit updated/edited tag to db
+    redirect to all tags page
+    """
+
+    tag = Tag.query.get(tag_id)
+
+    tag.name = request.form.get('name')
+
+    db.session.add(tag)
+    db.session.commit()
+
+    flash(f'{tag.name} edited', 'alert alert-success')
+
+    return redirect('/tags')
+
+
+@app.route('/tags/<int:tag_id>/delete', methods=['POST'])
+def delete_tag(tag_id):
+    """
+    delete tag
+    redirect to all tags page
+    """
+
+    tag = Tag.query.get(tag_id)
+
+    db.session.delete(tag)
+    db.session.commit()
+
+    flash(f'{tag.name} deleted', 'alert alert-danger')
+
+    return redirect('/tags')

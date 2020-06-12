@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Tag: {{tag.name}}
+{% endblock %}
+
+{% block content %}
+
+<h1 class="display-4">{{tag.name}}</h1>
+
+{% if tag.posts %}
+<ul>
+    {% for post in tag.posts %}
+    <li><a href="/posts/{{post.id}}"></a>{{post.title}}</li>
+    {% endfor %}
+</ul>
+
+{% else %}
+
+<h4>No posts have been linked to this tag</h4>
+
+{% endif %}
+
+<div class="form-group row ml-1">
+    <a class="btn btn-outline-primary " href="/tags">Cancel</a>
+    <a class="btn btn-primary ml-1" href="/tags/{{tag.id}}/edit">Edit</a>
+    <form action="/tags/{{tag.id}}/delete" , method="POST">
+        <button class="btn btn-danger ml-1" type="submit">Delete</button>
+    </form>
+</div>
+
+
+{% endblock %}

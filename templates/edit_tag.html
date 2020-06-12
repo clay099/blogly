@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Create a Tag{% endblock %}
+
+{% block content %}
+
+<h1 class="display-4">Create a Tag</h1>
+
+<form action="/tags/{{tags.id}}/new" method="POST">
+    <div class="form-group row">
+        <label class='col-md-1' for="name">Name</label>
+        <input type="text" class="form-control col-md-10" name="name" id="name" value="{{tags.name}}">
+    </div>
+    <a class="btn btn-outline-primary" href="/tags">Cancel</a>
+    <button type="submit" class="btn btn-success justify-content-end">Add</button>
+</form>
+
+{% endblock %}
