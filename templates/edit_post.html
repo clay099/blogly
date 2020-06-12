@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}New Post{% endblock %}
+{% block title %}Edit Post{% endblock %}
 
 {% block content %}
-<h1 class="display-4">Add Post for {{post.users.full_name}}</h1>
+<h1 class="display-4">Edit Post for {{post.users.full_name}}</h1>
 
 <form action="/posts/{{post.id}}/edit" method="POST">
     <div class="form-group row">
