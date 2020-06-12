@@ -1,4 +1,4 @@
-from models import User, Post, db
+from models import User, Post, db, Tag
 from app import app
 
 db.drop_all()
@@ -23,13 +23,13 @@ db.session.commit()
 p1 = Post(title="My First Post", content="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti magni laudantium inventore magnam. Eveniet ullam sequi, voluptates, quae voluptatem consequatur repudiandae optio libero vitae natus, eaque similique reiciendis fugiat pariatur?", user_id="1")
 p2 = Post(title="My Second Post",
           content="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus, quos?", user_id="1")
-p3 = Post(title="My First Post", content="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti magni laudantium inventore magnam. Eveniet ullam sequi, voluptates, quae voluptatem consequatur repudiandae optio libero vitae natus, eaque similique reiciendis fugiat pariatur?", user_id="1")
+p3 = Post(title="First Post!!!", content="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti magni laudantium inventore magnam. Eveniet ullam sequi, voluptates, quae voluptatem consequatur repudiandae optio libero vitae natus, eaque similique reiciendis fugiat pariatur?", user_id="1")
 p4 = Post(title="My Last Post",
           content="Lorem ipsum, dolor sit amet consectetur adipisicing elit. ", user_id="1")
 p5 = Post(title="My Post",
           content="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus, quos?", user_id="2")
 p6 = Post(title="New To This", content="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti magni laudantium inventore magnam. Eveniet ullam sequi, voluptates, quae voluptatem consequatur repudiandae optio libero vitae natus, eaque similique reiciendis fugiat pariatur?", user_id="3")
-p7 = Post(title="My Last Post",
+p7 = Post(title="Final Post",
           content="Lorem ipsum, dolor sit amet consectetur adipisicing elit. ", user_id="3")
 p8 = Post(title="New Blog",
           content="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus, quos?", user_id="4")
@@ -39,4 +39,14 @@ p10 = Post(title="What i just found out",
 
 
 db.session.add_all([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10])
+db.session.commit()
+
+
+t1 = Tag(name="Fun")
+t2 = Tag(name="Even More")
+t3 = Tag(name="Bloop")
+t4 = Tag(name="Zope")
+t5 = Tag(name="Curry")
+
+db.session.add_all([t1, t2, t3, t4, t5])
 db.session.commit()

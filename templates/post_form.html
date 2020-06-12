@@ -18,10 +18,20 @@
             <textarea class="form-control" name="content"></textarea>
         </div>
     </div>
-    <div class="row col-sm-12 col-lg-11 justify-content-end">
-        <a href="/users/{{user.id}}" class="btn btn-outline-primary justify-content-end">Cancel</a>
-        <button type="submit" class="btn btn-success ml-1">Save</button>
-    </div>
+    {% for tag in tags %}
+    <div class="input-group ">
+        <div class="input-group-prepend mr-2">
+            <div class="input-group-lable">
+                <input type="checkbox" name="tags" value="{{tag.id}}>
+            </div>
+        </div>
+        <label for=" tags">{{tag.name}}</label>
+            </div>
+            {% endfor %}
+            <div class="row col-sm-12 col-lg-11 justify-content-end">
+                <a href="/users/{{user.id}}" class="btn btn-outline-primary justify-content-end">Cancel</a>
+                <button type="submit" class="btn btn-success ml-1">Save</button>
+            </div>
 </form>
 
 {% endblock %}

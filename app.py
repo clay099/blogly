@@ -141,6 +141,16 @@ def delete_user(user_id):
     return redirect('/users')
 
 
+@app.route('/posts')
+def all_posts():
+    """
+    shows all posts
+    """
+    posts = Post.query.order_by(Post.title).all()
+
+    return render_template('all_posts.html', posts=posts)
+
+
 @app.route('/users/<int:user_id>/posts/new')
 def new_post_form(user_id):
     """
@@ -149,7 +159,9 @@ def new_post_form(user_id):
 
     user = User.query.get(user_id)
 
-    return render_template('post_form.html', user=user)
+    tags = Tag.query.all()
+
+    return render_template('post_form.html', user=user, tags=tags)
 
 
 @app.route('/users/<int:user_id>/posts/new', methods=['POST'])
@@ -192,7 +204,9 @@ def edit_post(post_id):
 
     post = Post.query.get_or_404(post_id)
 
-    return render_template('edit_post.html', post=post)
+    tags = Tag.query.all()
+
+    return render_template('edit_post.html', post=post, tags=tags)
 
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
@@ -205,6 +219,12 @@ def submit_edited_post(post_id):
 
     post.title = request.form.get('title')
     post.content = request.form.get('content')
+    post.tags = []
+
+    form_tags = request.form.getlist('tags')
+    for tag_id in form_tags:
+        tag = Tag.query.get(tag_id)
+        post.tags.append(tag)
 
     db.session.add(post)
     db.session.commit()

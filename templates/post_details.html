@@ -11,6 +11,13 @@
     <br><small>Date Created {{post.created_at}}</p>
 <p></small></p>
 
+<p>
+    <strong>Tags: </strong>
+    {% for tag in post.tags %}
+    <a class="badge badge-primary" href="/tags/{{tag.id}}">{{tag.name}}</a>
+    {% endfor %}
+</p>
+
 <div class="form-group row ml-1">
     <a class="btn btn-outline-primary " href="/users/{{post.user_id}}">Cancel</a>
     <a class="btn btn-primary ml-1" href="/posts/{{post.id}}/edit">Edit</a>
