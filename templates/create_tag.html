@@ -11,6 +11,16 @@
         <label class='col-md-1' for="name">Name</label>
         <input type="text" class="form-control col-md-10" name="name" id="name" placeholder="Enter a name for the tag">
     </div>
+    {% for post in posts %}
+    <div class="input-group ">
+        <div class="input-group-prepend mr-2">
+            <div class="input-group-lable">
+                <input type="checkbox" name="posts" value="{{post.id}}">
+            </div>
+        </div>
+        <label for="post">{{post.name}}</label>
+    </div>
+    {% endfor %}
     <a class="btn btn-outline-primary" href="/tags">Cancel</a>
     <button type="submit" class="btn btn-success justify-content-end">Add</button>
 </form>

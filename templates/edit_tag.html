@@ -6,13 +6,27 @@
 
 <h1 class="display-4">Create a Tag</h1>
 
-<form action="/tags/{{tags.id}}/new" method="POST">
+<form action="/tags/{{tag.id}}/edit" method="POST">
     <div class="form-group row">
         <label class='col-md-1' for="name">Name</label>
-        <input type="text" class="form-control col-md-10" name="name" id="name" value="{{tags.name}}">
+        <input type="text" class="form-control col-md-10" name="name" id="name" value="{{tag.name}}">
     </div>
+    {% for post in posts %}
+    <div class="input-group ">
+        <div class="input-group-prepend mr-2">
+            <div class="input-group-lable">
+                {% if post in tag.posts %}
+                <input type="checkbox" name="posts" value="{{post.id}}" checked>
+                {% else %}
+                <input type="checkbox" name="posts" value="{{post.id}}">
+                {% endif %}
+            </div>
+        </div>
+        <label for="post">{{post.title}}</label>
+    </div>
+    {% endfor %}
     <a class="btn btn-outline-primary" href="/tags">Cancel</a>
-    <button type="submit" class="btn btn-success justify-content-end">Add</button>
+    <button type="submit" class="btn btn-success justify-content-end">save</button>
 </form>
 
 {% endblock %}

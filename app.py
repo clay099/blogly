@@ -276,7 +276,9 @@ def new_tag():
     create new tag
     """
 
-    return render_template('create_tag.html')
+    posts = Post.query.all()
+
+    return render_template('create_tag.html', posts=posts)
 
 
 @app.route('/tags/new', methods=['POST'])
@@ -289,6 +291,12 @@ def add_new_tag():
     name = request.form.get('name')
 
     tag = Tag(name=name)
+
+    form_posts = request.form.getlist('posts')
+    for post_id in form_posts:
+        post = Post.query.get(post_id)
+        tag.posts.append(post)
+
     db.session.add(tag)
     db.session.commit()
 
@@ -305,7 +313,9 @@ def edit_tag(tag_id):
 
     tag = Tag.query.get_or_404(tag_id)
 
-    return render_template('edit_tag.html', tag=tag)
+    posts = Post.query.all()
+
+    return render_template('edit_tag.html', tag=tag, posts=posts)
 
 
 @app.route('/tags/<int:tag_id>/edit', methods=['POST'])
@@ -318,6 +328,12 @@ def submit_updated_tag(tag_id):
     tag = Tag.query.get(tag_id)
 
     tag.name = request.form.get('name')
+    tag.posts = []
+
+    form_posts = request.form.getlist('posts')
+    for post_id in form_posts:
+        post = Post.query.get(post_id)
+        tag.posts.append(post)
 
     db.session.add(tag)
     db.session.commit()

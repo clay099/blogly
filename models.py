@@ -35,7 +35,7 @@ class User(db.Model):
         """show information about users"""
 
         u = self
-        return f"< User id {u.id} first_name {u.first_name} last_name {u.last_name} image_url {u.image_url}>"
+        return f"< User ID={u.id} First_name={u.first_name} Last_name={u.last_name} Image_url={u.image_url} >"
 
 
 class Post(db.Model):
@@ -60,7 +60,7 @@ class Post(db.Model):
         """show information about users"""
 
         p = self
-        return f"< Post id {p.id} title {p.title} content {p.content} created_at {p.created_at} user_id {p.user_id}>"
+        return f"< Post ID={p.id} Title={p.title} Content={p.content} Created_at={p.created_at} User_id={p.user_id} >"
 
 
 class Tag(db.Model):
@@ -75,7 +75,7 @@ class Tag(db.Model):
 
     def __repr__(self):
         t = self
-        return f'< Tag id {t.id} name {t.name} >'
+        return f'< Tag ID={t.id} Name={t.name} >'
 
 
 class PostTag(db.Model):
@@ -89,4 +89,4 @@ class PostTag(db.Model):
 
     def __repr__(self):
         t = self
-        return f'< PostTag post_id {t.post_id} tag_id {t.tag_id} >'
+        return f'< PostTag Post_id={t.post_id} Tag_id={t.tag_id} >'
