@@ -35,7 +35,7 @@ class User(db.Model):
         """show information about users"""
 
         u = self
-        return f"< User {u.first_name} {u.last_name} {u.image_url}>"
+        return f"< User id {u.id} first_name {u.first_name} last_name {u.last_name} image_url {u.image_url}>"
 
 
 class Post(db.Model):
@@ -60,4 +60,33 @@ class Post(db.Model):
         """show information about users"""
 
         p = self
-        return f"< Post {p.title} {p.content} {p.created_at} {p.user_id}>"
+        return f"< Post id {p.id} title {p.title} content {p.content} created_at {p.created_at} user_id {p.user_id}>"
+
+
+class Tag(db.Model):
+    """Tag Class"""
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+    posts = db.relationship('Post', secondary='post_tag', backref='tags')
+
+    def __repr__(self):
+        t = self
+        return f'< Tag id {t.id} name {t.name} >'
+
+
+class PostTag(db.Model):
+    """PostTag Class"""
+
+    __tablename__ = "post_tag"
+
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        'posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+
+    def __repr__(self):
+        t = self
+        return f'< PostTag post_id {t.post_id} tag_id {t.tag_id} >'
