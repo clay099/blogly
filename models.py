@@ -13,6 +13,9 @@ def connect_db(app):
     db.init_app(app)
 
 
+DEFAULT_IMAGE_URL = "https://www.freeiconspng.com/uploads/icon-user-blue-symbol-people-person-generic--public-domain--21.png"
+
+
 class User(db.Model):
     """Users Class"""
 
@@ -23,7 +26,7 @@ class User(db.Model):
     first_name = db.Column(db.String,
                            nullable=False)
     last_name = db.Column(db.String,
-                          nullable=False)
+                          nullable=False, default=DEFAULT_IMAGE_URL)
     image_url = db.Column(db.String)
 
     @ property

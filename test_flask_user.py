@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User, Post
+from models import db, User, Post, Tag
 
 # Use test database and don't clutter tests with SQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
@@ -34,14 +34,6 @@ class UserTestCase(TestCase):
         self.user2_id = user2.id
 
         self.user1 = user1
-
-        post = Post(title="postTitle", content="postContent", user_id=user1.id)
-
-        db.session.add(post)
-        db.session.commit()
-
-        self.post_id = post.id
-        self.post = post
 
         self.client = app.test_client()
 
@@ -129,7 +121,7 @@ class UserTestCase(TestCase):
     def test_user_delete(self):
         """test delete function"""
         userToDelete = User(first_name="firstDeleteMe",
-                            last_name="lastDeleteMe", image_url="")
+                            last_name="lastDeleteMe", image_url="https://cdn.pixabay.com/photo/2019/07/30/05/53/dog-4372036__340.jpg")
 
         db.session.add(userToDelete)
         db.session.commit()
@@ -139,67 +131,5 @@ class UserTestCase(TestCase):
         html = resp.get_data(as_text=True)
 
         self.assertEqual(resp.status_code, 200)
-        self.assertNotIn('firstDeleteMe', html)
-
-    def test_new_post(self):
-        resp = self.client.get(f'/users/{self.user1_id}/posts/new')
-
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn(b'Add Post for', resp.data)
-
-    def test_new_post_db(self):
-        resp = self.client.post(
-            f'/users/{self.user1_id}/posts/new', data={"title": "title", "content": "content"})
-
-        self.assertEqual(resp.status_code, 302)
-
-    def test_new_post_db_follow(self):
-        resp = self.client.post(
-            f'/users/{self.user1_id}/posts/new', data={"title": "postTitle", "content": "postContent"}, follow_redirects=True)
-
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn(b"postTitle", resp.data)
-
-    def test_post_details(self):
-        resp = self.client.get(f'/posts/{self.post_id}')
-
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn(b'Date Created', resp.data)
-
-    def test_no_post_id_details(self):
-        resp = self.client.get(f'/posts/10000000000000')
-
-        self.assertEqual(resp.status_code, 404)
-
-    def test_edit_post(self):
-        resp = self.client.get(f'/posts/{self.post_id}/edit')
-        html = resp.get_data(as_text=True)
-
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn(self.post.title, html)
-
-    def test_edit_post_db(self):
-        resp = self.client.post(f'/posts/{self.post_id}/edit',  data={
-                                "title": "postTitleUpdated", "content": "postContentUpdated"})
-
-        self.assertEqual(resp.status_code, 302)
-
-    def test_edit_post_db(self):
-        resp = self.client.post(f'/posts/{self.post_id}/edit', data={
-                                "title": "postTitleUpdated", "content": "postContentUpdated"}, follow_redirects=True)
-
-        self.assertEqual(resp.status_code, 200)
-        self.assertIn(b'postTitleUpdated', resp.data)
-
-    def test_delete_posts(self):
-        postToDelete = Post(title="postTitleToDelete",
-                            content="postContentToDelete", user_id=self.user1.id)
-
-        db.session.add(postToDelete)
-        db.session.commit()
-
-        resp = self.client.post(
-            f'/posts/{postToDelete.id}/delete', follow_redirects=True)
-
-        self.assertEqual(resp.status_code, 200)
-        self.assertNotIn(b'postTitleToDelete', resp.data)
+        self.assertNotIn(
+            'https://cdn.pixabay.com/photo/2019/07/30/05/53/dog-4372036__340.jpg', html)
